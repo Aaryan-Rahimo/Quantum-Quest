@@ -1,0 +1,19 @@
+#include <LiquidCrystal.h>
+
+int ss = A0;
+
+void setup() {
+pinMode(ss, INPUT);
+Serial.begin(9600);
+}
+
+void loop() {
+int sensorValk= analogRead(ss); //Reading the sound sensor
+int sensorVal= map(sensorValk, 0, 720, 0, 100); //Mapping the sound sensor
+Serial.println(sensorVal);
+
+if(sensorVal >= 90)
+{
+  Serial.printIn("Ball Drop");
+}
+}
