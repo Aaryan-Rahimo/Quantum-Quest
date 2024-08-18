@@ -1,1 +1,124 @@
 
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+int ss = A0;
+int trig = A1;
+int echo = A2;
+
+int okb = 13;
+int resetb = 10;
+int distanceb = 5; // Distance button pin number
+
+int PS = 6;
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+enum ScreenState {
+  WELCOME_SCREEN,
+  VELOCITY_TIME_SCREEN,
+  DISTANCE_MEASUREMENT_SCREEN,
+  SAVE_MEASUREMENT_SCREEN
+};
+
+ScreenState currentScreen = WELCOME_SCREEN;
+
+void setup() {
+  pinMode(ss, INPUT);
+  Serial.begin(9600);
+
+  lcd.init(); // Initialize the LCD
+  lcd.backlight(); // Turn on the backlight
+
+  pinMode(okb, INPUT_PULLUP);    // Use internal pull-up resistors
+  pinMode(resetb, INPUT_PULLUP); // Use internal pull-up resistors
+  pinMode(distanceb, INPUT_PULLUP); // Use internal pull-up resistors
+  pinMode(trig, OUTPUT);
+  pinMode(echo, INPUT);
+
+  // Display the initial welcome message
+  displayWelcomeScreen();
+}
+
+void loop() {
+  // Continuously check button states and act accordingly
+  if (digitalRead(resetb) == LOW) {
+    displayWelcomeScreen();
+  } else if (digitalRead(distanceb) == LOW) {
+    displayVelocityTimeScreen();
+  } else if (digitalRead(okb) == LOW && currentScreen == VELOCITY_TIME_SCREEN) {
+    measureDistance();
+  } else if (digitalRead(okb) == LOW && currentScreen == DISTANCE_MEASUREMENT_SCREEN) {
+    saveMeasurement();
+  }
+}
+
+void displayWelcomeScreen() {
+  currentScreen = WELCOME_SCREEN;
+  lcd.clear(); // Clear the display
+  lcd.setCursor(0, 0);
+  lcd.print("Welcome to ");
+  lcd.setCursor(0, 1);
+  lcd.print("Quantum Quest!");
+  delay(1000); // Short delay to allow reading the message
+}
+
+void displayVelocityTimeScreen() {
+  currentScreen = VELOCITY_TIME_SCREEN;
+  lcd.clear(); // Clear the display
+  lcd.setCursor(0, 0);
+  lcd.print("Velocity & Time");
+  lcd.setCursor(0, 1);
+  lcd.print("Press Ok to test");
+  delay(1000); // Short delay to allow reading the message
+}
+
+void measureDistance() {
+  currentScreen = DISTANCE_MEASUREMENT_SCREEN;
+
+  while (true) {
+    float distance;
+
+    // Trigger the sensor
+    digitalWrite(trig, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trig, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trig, LOW);
+
+    // Read the echo time
+    long duration = pulseIn(echo, HIGH);
+
+    // Calculate distance in cm
+    distance = duration * 0.034 / 2;
+
+    // Display the distance on the LCD
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Distance: ");
+    lcd.setCursor(0, 1);
+    lcd.print(distance);
+    lcd.print(" cm");
+
+    // Print to serial monitor for debugging
+    Serial.print("Distance: ");
+    Serial.print(distance);
+    Serial.println(" cm");
+
+    delay(500); // Delay to allow reading the measurement
+
+    // Check if reset button is pressed to exit the distance measurement loop
+    if (digitalRead(resetb) == LOW) {
+      displayWelcomeScreen();
+      break; // Exit the loop and return to the main loop
+    }
+  }
+}
+
+void saveMeasurement() {
+  currentScreen = SAVE_MEASUREMENT_SCREEN;
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Measurement saved!");
+  delay(1000); // Short delay to allow reading the message
+}
