@@ -1,49 +1,41 @@
-#Important Info - some of the code is in the discord, given by chat gpt, like the arduino code that may be useful 
-#We used placeholders within the functions, so those can be replaced with the serial monitor, i.e the distance output
-#Also for the last functions, for velocity and acceleration, we made the assumption that we would be able to read time and displacement through the serial monitor, the code provided in the discord gc give the scenerio for outputting both of these
+#get values for velocity, acceleration, etc... from c++ code/arduino IDE into here and store them as variables
+import math
 import serial
-import time
+#arduino = serial.Serial('COM9', 9600) #change com port and number on the side
+displacement = 15  #placeholder value
+displacement = displacement / 100
+time = 1.1  #placeholder value
+velocity = 0.0
 
-# Initialize the serial connection (adjust the port and baudrate as necessary)
-ser = serial.Serial('COM3', 9600)  # Replace 'COM3' with your serial port
-time.sleep(2)  # Give the connection a moment to establish
 
-previous_distance = None
-previous_time = None
+#You will need to pass through the displacement values given by the sensor
+def getDisplacement(displacement):
+    if displacement <= 0.7 and displacement >= 0.02:
+        print("Displacement (in m): ", round(displacement, 2))
+    else:
+        print("Error, displacement is not in range of the Distance Sensor.")
 
-def calculate_velocity(distance1, time1, distance2, time2):
-    return (distance2 - distance1) / (time2 - time1)
 
-def calculate_acceleration(velocity1, velocity2, time1, time2):
-    return (velocity2 - velocity1) / (time2 - time1)
+#Again we need displacement from sensor, and idealy, we would want the time values as well
+#by the sensor as well (or let the students record the time)
+def getVelocity(displacement):
+    if displacement <= 0.7 and displacement >= 0.02:
+        velocity = displacement / time
+        print("Velocity (in m/s): ", round(velocity, 2))
+    else:
+        print("Error, displacement is not in range of the Distance Sensor.")
+    return velocity
 
-while True:
-    if ser.in_waiting > 0:
-        line = ser.readline().decode('utf-8').strip()
-        if line:
-            try:
-                # Split the data
-                distance_str, time_str = line.split(',')
-                current_distance = float(distance_str)
-                current_time = float(time_str)
 
-                if previous_distance is not None and previous_time is not None:
-                    # Calculate velocity and acceleration
-                    velocity = calculate_velocity(previous_distance, previous_time, current_distance, current_time)
-                    print(f"Velocity: {velocity} cm/s")
+def getAcceleration(velocity):
+    acceleration = velocity / time
+    print("Acceleration (in m/s^2): ", round(acceleration, 2))
+    #If displacement is out of bound
+    #print("Enter the time it took to travel the distance (in s): ") if arduino ide can't record time
+    #input(time) if arduino ide can't record time
 
-                    # Assume you have a previous_velocity value to calculate acceleration
-                    if 'previous_velocity' in locals():
-                        acceleration = calculate_acceleration(previous_velocity, velocity, previous_time, current_time)
-                        print(f"Acceleration: {acceleration} cm/s^2")
-                    
-                    previous_velocity = velocity
-                
-                # Update previous distance and time
-                previous_distance = current_distance
-                previous_time = current_time
 
-            except ValueError:
-                print("Error parsing data")
-    
-    time.sleep(0.1)  # Adjust the delay as needed
+#print both in html file here
+getDisplacement(displacement)
+new_velocity = getVelocity(displacement)
+getAcceleration(new_velocity)
