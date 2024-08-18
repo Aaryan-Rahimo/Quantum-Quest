@@ -136,6 +136,11 @@
         <h3>Conservation of Energy</h3> <p>The Conservation of Energy is that energy cannot be created or destroyed in our universe. Thus, there has to be conversions of energy in certain scenarios. Say if a ball was dropped from a certain height, then we would need to consider that as the ball is travelling down, there is a conversion of energy from Eg to Ek getting velocity throughout the whole process.</p>
     </div>
     <img src="ex3.jpg" style="width:500px;height:248px">
-
+    <div class="Electromagnetic">
+        <h3>What is Electromagnetism?</h3><p>Coming Soon!</p>    
+    </div>
+    <div class="Waves">
+    <h3>What is Waves?</h3><p>Coming Soon!</p>    
+    </div>
 </body>
 </html>
