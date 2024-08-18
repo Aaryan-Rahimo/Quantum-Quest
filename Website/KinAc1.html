@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kinematics</title>
+    <link rel="stylesheet" href="styles/Topics.css">
+    <link rel="icon" type = "image/x-icon" href ="images/logo.clear.png">
+
+</head>
+<body>
+    <div class="top-bar">
+        <div class="logo">
+            <img class="logo-image" src="images/logo.clear.png" alt="Quantum Quest Logo">
+        </div>
+        <div class="title">Quantum Quest</div>
+        <div class="nav-items">
+            <a href="Kinematics.html">Back to Kinematics</a>
+            <a href="#profile">Profile</a>
+            <a href="#about">About</a>
+            <a href="#lessons">Lessons</a>
+        </div>
+    </div>
+    
+    <div class="topic-header">
+        <div class="content">
+            <div class="heading">Kinematics - Activity 1</div>
+            <div>Lets now use the Sensor Kit to learn about Kinematics!</div>
+        </div>
+    </div>
+    
+    <div class="search-bar">
+        <input type="text" placeholder="Search for a lesson or topic">
+        <button type="submit">Search</button>
+    </div>
+
+    <div class="lesson-box">
+      <h2>Displacement and Distance</h2>
+      <p>Displacement is the change in position of an object, or how far an object is from its original position. It is a vector quantity, which means it has both magnitude and direction. Distance, on the other hand, is the total length an object has traveled from its original position, or the path it has covered. Unlike displacement, distance is a scalar quantity, meaning it only has magnitude and no direction.</p>
+      <div class="image-container">
+          <img src="images/displacement.jpg" alt="Displacement vs Distance" />
+          <p class="figure-caption">Figure 1: Illustration of Distance and Displacement.</p>
+      </div>
+      <p>In Figure 1, the green dashed line represents the path taken by the object, which is its distance, 
+        while the straight black line represents the shortest path from point A to point B, 
+        which is its displacement. Even though the distance traveled is longer, 
+        the displacement only considers the straight line between the starting and ending points.</p>
+      <p>In this activity, we'll be using the distance sensor to explore the displacement of an object. 
+        The distance sensor will measure how far an object is from the sensor and output that distance 
+        in meters. This will allow us to observe the displacement of the object in real-time. 
+        Ready to give it a shot? Let's go!</p>
+  </div>
+
+  <div class="interactive-activity-box">
+    <h2>Interactive Activity - Measure Displacement</h2>
+    <p>Use the distance sensor to measure the displacement of an object from its starting point. The sensor will provide real-time data on how far the object is from the sensor. This data will be displayed below.</p>
+    
+    <div class="sensor-display">
+        <h3>Sensor Output</h3>
+        <p id="distance-value">Displacement: -- meters</p>
+    </div>
+    
+    <div class="activity-controls">
+        <button onclick="startActivity()">Start</button>
+        <button onclick="stopActivity()">Stop</button>
+        <button onclick="resetActivity()">Reset</button>
+    </div>
+    
+    <p>Note: This activity will demonstrate how displacement is measured in real-time using the HC-SR04 sensor. The distance value will update as you move an object closer or further away from the sensor.</p>
+</div>
+
+</body>
