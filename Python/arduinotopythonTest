@@ -1,0 +1,49 @@
+#Important Info - some of the code is in the discord, given by chat gpt, like the arduino code that may be useful 
+#We used placeholders within the functions, so those can be replaced with the serial monitor, i.e the distance output
+#Also for the last functions, for velocity and acceleration, we made the assumption that we would be able to read time and displacement through the serial monitor, the code provided in the discord gc give the scenerio for outputting both of these
+import serial
+import time
+
+# Initialize the serial connection (adjust the port and baudrate as necessary)
+ser = serial.Serial('COM3', 9600)  # Replace 'COM3' with your serial port
+time.sleep(2)  # Give the connection a moment to establish
+
+previous_distance = None
+previous_time = None
+
+def calculate_velocity(distance1, time1, distance2, time2):
+    return (distance2 - distance1) / (time2 - time1)
+
+def calculate_acceleration(velocity1, velocity2, time1, time2):
+    return (velocity2 - velocity1) / (time2 - time1)
+
+while True:
+    if ser.in_waiting > 0:
+        line = ser.readline().decode('utf-8').strip()
+        if line:
+            try:
+                # Split the data
+                distance_str, time_str = line.split(',')
+                current_distance = float(distance_str)
+                current_time = float(time_str)
+
+                if previous_distance is not None and previous_time is not None:
+                    # Calculate velocity and acceleration
+                    velocity = calculate_velocity(previous_distance, previous_time, current_distance, current_time)
+                    print(f"Velocity: {velocity} cm/s")
+
+                    # Assume you have a previous_velocity value to calculate acceleration
+                    if 'previous_velocity' in locals():
+                        acceleration = calculate_acceleration(previous_velocity, velocity, previous_time, current_time)
+                        print(f"Acceleration: {acceleration} cm/s^2")
+                    
+                    previous_velocity = velocity
+                
+                # Update previous distance and time
+                previous_distance = current_distance
+                previous_time = current_time
+
+            except ValueError:
+                print("Error parsing data")
+    
+    time.sleep(0.1)  # Adjust the delay as needed
